@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <display-name>BonBon</display-name>
+
+    <!-- register guice modules-->
+    <context-param>
+        <param-name>resteasy.guice.modules</param-name>
+        <param-value>
+            org.jboss.resteasy.plugins.guice.ext.RequestScopeModule,
+            com.romelj.bonbon.guice.ServiceModule,
+            com.romelj.bonbon.guice.RestEasyModule
+        </param-value>
+    </context-param>
+    <!-- register guice modules end -->
+
+
+    <context-param>
+        <param-name>resteasy.providers</param-name>
+        <param-value>
+            com.romelj.bonbon.exceptions.BonBonExceptionHandler
+        </param-value>
+    </context-param>
+    <context-param>
+        <param-name>resteasy.role.based.security</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>ObjectifyFilter</filter-name>
+        <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ObjectifyFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>Resteasy</filter-name>
+        <filter-class>
+            org.jboss.resteasy.plugins.server.servlet.FilterDispatcher
+        </filter-class>
+        <init-param>
+            <param-name>resteasy.servlet.mapping.prefix</param-name>
+            <param-value>/*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>Resteasy</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>
+            org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener
+        </listener-class>
+    </listener>
+
+</web-app>
